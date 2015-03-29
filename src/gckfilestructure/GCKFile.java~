@@ -1,0 +1,99 @@
+package gckfilestructure;
+
+import java.io.File;
+
+/**
+ *
+ * @author Matyas Medzihradszy
+ * @version 0.1
+ */
+public class GCKFile {
+    public GCKFile(File file) {
+        super();
+        this.file = file;
+        header = new FileHeader();
+        sequence = new Sequence();
+    }
+
+    public File getFile() {
+        return file;
+    }
+
+    public FileHeader getHeader() {
+        return header;
+    }
+
+    public Sequence getSequence() {
+        return sequence;
+    }
+
+    public void setSequence(Sequence sequence) {
+        this.sequence = sequence;
+    }
+
+    public int getLengthRegions() {
+        return lengthRegions;
+    }
+
+    public void setLengthRegions(int lengthRegions) {
+        this.lengthRegions = lengthRegions;
+    }
+
+    public short getNumRegions() {
+        return numRegions;
+    }
+
+    public void setNumRegions(short numRegions) {
+        this.numRegions = numRegions;
+    }
+
+    public int getLengthFeatures() {
+        return lengthFeatures;
+    }
+
+    public void setLengthFeatures(int lengthFeatures) {
+        this.lengthFeatures = lengthFeatures;
+    }
+
+    public short getNumFeatures() {
+        return numFeatures;
+    }
+
+    public void setNumFeatures(short numFeatures) {
+        this.numFeatures = numFeatures;
+    }
+    
+    public void allocateRegions() {
+        regions = new Region[numRegions];
+        for (int i = 0; i < regions.length; i++) {
+            regions[i] = new Region();
+        }
+    }
+    
+    public Region getRegion(int i) {
+        return regions[i];
+    }
+    
+    public void allocateFeatures() {
+        features = new Feature[numFeatures];
+        for (int i = 0; i < features.length; i++) {
+            features[i] = new Feature();
+        }
+    }
+    
+    public Feature getFeature(int i) {
+        return features[i];
+    }
+    
+    private File file;
+    private FileHeader header;
+    private Sequence sequence;
+    private int lengthRegions;
+    private short numRegions;
+    private int lengthFeatures;
+    private short numFeatures;
+    public final static int REGION_DEF_LENGTH = 0x2C;
+    public final static int FEATURE_DEF_LENGTH = 0x5C;
+    private Region[] regions;
+    private Feature[] features;
+}

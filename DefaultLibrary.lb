@@ -1,0 +1,50 @@
+//****************************************************************************//
+//   This is the library file to use with GCK convert.
+//
+//   Comments can be added on a new line or after an entry, marked with: '//'
+//   Groups are started by the keyword Group: (All processed groups are already
+//      included in the file. Do NOT add any more).
+//   Groups denote GeneBank keywords as seen below.
+//   Entries should be always on a new line.
+//   Entries can be preceded by the following tokens:
+//          'C:' - this means that the part can be Contained within a name.
+//          'P:' - this means that a regular expression is given.
+//                 See: http://www.regular-expressions.info/ for more
+//                 information about regular expressions.
+//
+//      Entries not preceded by a token are taken to mean that the name of the
+//   feature must match exactly to be accepted within the group. Entries are not
+//   case sensitive. Leading and trailing spaces are removed.
+//
+//   There is one special group: 'exclude'.
+//   Any feature listed below this is, if found, excluded from the final
+//   GeneBank file generated.
+//
+//   
+//
+//****************************************************************************//
+
+Group:gene
+Group:CDS
+Group:misc_binding
+Group:misc_feature
+Group:misc_recomb
+      RB //Right border
+      LB //Left border
+Group:misc_rna
+Group:misc_signal
+Group:primer
+Group:primer_bind
+      P:^A\d{5}$  // This will select all the primers in the lab in the form of: A00000
+Group:rep_origin
+      C:origin
+      C:ORI
+Group:sig_peptide
+Group:terminator
+      C:terminator
+Group:promoter
+      C:promoter
+Group:exclude
+      C:Construct:
+      C:berhang // Remains from 'Überhang', which is an automatic annotation by GCK.
+      NONE //Features that have no name. Automatic annotations by GCK.

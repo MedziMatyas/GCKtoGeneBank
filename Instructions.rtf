@@ -1,0 +1,67 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1187\cocoasubrtf390
+{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;}
+\paperw11900\paperh16840\margl1440\margr1440\vieww10800\viewh8400\viewkind0
+\deftab720
+\pard\pardeftab720\qc
+
+\f0\fs36 \cf0 Instructions:
+\fs24 \
+\pard\pardeftab720
+\cf0 \
+
+\b 1) Click the 'Select files' button. 
+\b0 \
+\
+This opens a file chooser where you can select as many files as you wish. To open files on the server you need to go to the Macintosh HD/Volumes/Jlab/... folder. It automatically only selects .gcc or .gcs files, although you can change this if with the 'File Format:' drop down menu below the selector.\
+\
+
+\b 2) Click the 'Set destination' button.
+\b0  (This is not always necessary)\
+\
+The destination folder is by default the same folder as where the selected files were. If this is on the server the program has no permission to writer there, so you should select a folder on your own hard drive. (Double check the path name of the destination as there are a few quirks sometime).\
+\
+
+\b 3) That is it, you can click 'Convert' 
+\b0 and you should see a list of: 'File \'85. converted' messages.\
+\
+\
+
+\b Options:
+\b0 \
+There are two options that can be set in the program, although usually you do not need to touch these. \
+\
+The first is the 'Include ApE data'. This adds annotations that ApE (A Plasmid Editor) uses: such as colour, arrow styles, etc. This is not needed if you do not plan to use ApE, but it will not hurt either. The file will still be openable by any program that can read a GeneBank file. (It is also not strictly needed if you do want to open it with ApE, but it will make it look nicer).\
+\
+The other option is: 'Parsing level'. This sets how strictly the computer tries to remove annotations from the final file. This is needed because of the amount of automatic annotations that GCK inserts into the file.\
+\
+The settings are as follows:\
+\
+- 
+\i None
+\i0 : nothing is done.\
+\
+- 
+\i Low
+\i0 : tries to remove duplicate features.\
+\
+- 
+\i Medium
+\i0 : This is the default. Besides the above it removes features that are unnamed and smaller than 10bp. It also uses the library to exclude annotations (see below).\
+\
+- 
+\i High
+\i0 : removes named features within named features keeping only the largest.\
+\
+- 
+\i Max
+\i0 : removes any unnamed features within another feature keeping only the largest.\'a0\
+\
+(If you wish to play around with the settings you do not need to select the files again, you can just change it and click 'Convert'. The file created the first time will be overwritten).\
+\
+
+\b The library file:
+\b0 \
+In the folder you will find a file named: 'DefaultLibrary.lb'. This is a simple text file that contains definitions that can be used to better annotate and parse the features. The program reads these and tries to annotate or exclude features based on this. Further information are found in the file itself.\
+\
+For example: If you know that everything that contains in its name: 'promoter' is a promoter, the computer will annotate it as such. If you want to exclude everything that has the word 'copy' in it, that is also possible.}
