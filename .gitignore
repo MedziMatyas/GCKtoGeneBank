@@ -1,0 +1,21 @@
+*.class
+*~
+
+# Package Files #
+*.jar
+*.war
+*.ear
+
+# IDE generated files #
+.idea/
+out/
+
+# Included libraries #
+lib/
+
+# Files for Artifacts #
+META-INF/
+
+# Virtual machine crash logs, see http://www.java.com/en/download/hel/error_hotspot.xml
+hs_err_pid*
+
