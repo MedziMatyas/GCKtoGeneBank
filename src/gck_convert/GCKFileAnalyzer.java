@@ -208,13 +208,14 @@ public class GCKFileAnalyzer {
             //Iterate through the Features adding the names.
             for (int i = 0; i < gckFile.getNumFeatures(); i++) {
                 if(gckFile.getFeature(i).hasName()) {
-                    //Names are short and their length is stored in a byte variable.
+                    //Names are short and their length is stored in a byte variable. It is unsigned.
                     fileInputStream.read(buffer.array(), 0, 1);
-                    fileInputStream.read(buffer.array(), 1, (int)buffer.get(0) & 0xff);
+                    int nameLength = ((int)buffer.get(0) & 0xff);
+                    fileInputStream.read(buffer.array(), 1, nameLength);
                         
                     //Need to convert all the bytes to chars so that we can
                     //make a String, as GCK files use 1 byte chars.
-                    char[] c = new char[buffer.get(0)];
+                    char[] c = new char[nameLength];
                     for (int j = 0; j < c.length; j++) {
                         c[j] = (char)(buffer.get(j+1));
                     }
