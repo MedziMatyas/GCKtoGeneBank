@@ -12,10 +12,6 @@ import java.io.File;
  * @version 0.1
  */
 public class GCKFile {
-    public GCKFile() {
-        super();
-    }
-    
     public GCKFile(File file, FileType type) {
         super();
         this.file = file;
@@ -71,14 +67,6 @@ public class GCKFile {
         this.isCircular = isCircular;
     }
 
-    public int getLengthSites() {
-        return lengthSites;
-    }
-
-    public void setLengthSites(int lengthSites) {
-        this.lengthSites = lengthSites;
-    }
-
     public short getNumSites() {
         return numSites;
     }
@@ -129,13 +117,7 @@ public class GCKFile {
         return constructName;
     }
 
-    public void setConstructName(String constructName) {
-        this.constructName = constructName;
-    }
-
-    public void setFileType(FileType type) {
-        this.type = type;
-    }
+    public void setConstructName(String constructName) { this.constructName = constructName; }
 
     public FileType getFileType() {
         return type;
@@ -144,7 +126,7 @@ public class GCKFile {
 
     //Fields
     public static enum FileType {
-        GCC, GCS;
+        GCC, GCS
     }
 
     private File file; //handle to the physical file
@@ -152,7 +134,6 @@ public class GCKFile {
     private short numRegions; //number of defined regions found
     private int lengthFeatures; //total length of feature definitions in bytes
     private short numFeatures; //number of defined features found
-    private int lengthSites;
     private short numSites;
     private Region[] regions;
     private Feature[] features;
@@ -164,8 +145,9 @@ public class GCKFile {
 
     /***** CONSTANTS *****/
     public final static int REGION_DEF_LENGTH = 0x2C; //length of a single region definition
-    public final static int FEATURE_DEF_LENGTH = 0x5C; //length of a single feature definition
+    public final static int FEATURE_DEF_LENGTH = 0x5C; //length of a single feature definition. Not used, calculated to make sure.
     public final static int HEADER_LENGTH = 0x20; //Header size in bytes
     public final static int GENERATION_DEF_LENGTH = 260;
     public final static int CONSTRUCT_NAME_OFFSET = 706;
+    public final static boolean USE_FILENAME_FOR_CONSTRUCT = true;
 }

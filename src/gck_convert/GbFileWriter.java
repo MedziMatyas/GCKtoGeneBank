@@ -15,9 +15,7 @@ import java.util.LinkedList;
  *
  * @author Matyas Medzihradszky
  * @version 0.1
- * 
- * Done - Write region information according to region type. (This is actually only applicable to Features as regions
- * do not have names, thus they cannot be assigned a type).
+ *
  */
 public class GbFileWriter {
 
@@ -54,7 +52,7 @@ public class GbFileWriter {
 
 
     /**
-     * Writes the standard Genebank file header.
+     * Writes the standard GeneBank file header.
      */
     private void writeGbFileHeader() {
         printWriter.write(String.format("%-12s", "LOCUS"));

@@ -50,13 +50,13 @@ public class GCKFileAnalyzer {
      */
     private void readFileHeader() {
         logger.info("Reading file header.");
-        buffer = ByteBuffer.allocate(gckFile.HEADER_LENGTH);
+        buffer = ByteBuffer.allocate(GCKFile.HEADER_LENGTH);
         try {
             //Set read position to the start of the file.
             fileInputStream.getChannel().position(0);
             
             //Read sequence length data.
-            fileInputStream.read(buffer.array(), 0, gckFile.HEADER_LENGTH);
+            fileInputStream.read(buffer.array(), 0, GCKFile.HEADER_LENGTH);
             gckFile.setSequenceLength(buffer.getInt(buffer.capacity()-(Integer.SIZE/8)));
             
             //Read length of region definitions.
@@ -90,7 +90,7 @@ public class GCKFileAnalyzer {
         try {
             //Set read position to the end of the sequence listing where region
             //definitions start.
-            fileInputStream.getChannel().position(gckFile.HEADER_LENGTH + gckFile.getSequenceLength());
+            fileInputStream.getChannel().position(GCKFile.HEADER_LENGTH + gckFile.getSequenceLength());
             
             //Skip the offset and the sequence length entry.
             fileInputStream.skip(8);
@@ -134,7 +134,7 @@ public class GCKFileAnalyzer {
         logger.info("Reading feature definitions.");
         try {
             //Set read position to the end of the regions, where the feature definitions start.
-            fileInputStream.getChannel().position(gckFile.HEADER_LENGTH + gckFile.getSequenceLength() + gckFile.getLengthRegions() + 4);
+            fileInputStream.getChannel().position(GCKFile.HEADER_LENGTH + gckFile.getSequenceLength() + gckFile.getLengthRegions() + 4);
 
             //Skip the offset and the sequence length entry.
             fileInputStream.skip(8);
@@ -203,7 +203,7 @@ public class GCKFileAnalyzer {
         buffer = ByteBuffer.allocate(0xffff);
         try {
             //Set the reading position to the end of the feature definitions.
-            fileInputStream.getChannel().position(gckFile.HEADER_LENGTH + gckFile.getSequenceLength() + gckFile.getLengthRegions() + gckFile.getLengthFeatures() + 8);
+            fileInputStream.getChannel().position(GCKFile.HEADER_LENGTH + gckFile.getSequenceLength() + gckFile.getLengthRegions() + gckFile.getLengthFeatures() + 8);
             
             //Iterate through the Features adding the names.
             for (int i = 0; i < gckFile.getNumFeatures(); i++) {
@@ -285,7 +285,7 @@ public class GCKFileAnalyzer {
         logger.info("Sequence reading started.");
         if (buffer.capacity() > 0) {
             try {
-                fileInputStream.getChannel().position(gckFile.HEADER_LENGTH);
+                fileInputStream.getChannel().position(GCKFile.HEADER_LENGTH);
                 fileInputStream.read(buffer.array(), 0, gckFile.getSequenceLength());
                 char[] c = new char[gckFile.getSequenceLength()];
                 for (int i = 0; i < gckFile.getSequenceLength(); i++) {
@@ -309,7 +309,7 @@ public class GCKFileAnalyzer {
     	//gckFile.getHeader().getHEADER_SIZE()+gckFile.getSequence().getLength()+gckFile.getLengthRegions()+gckFile.getLengthFeatures()
     	//gckFile.
         try {
-            fileInputStream.getChannel().position(gckFile.HEADER_LENGTH + gckFile.getSequenceLength() + gckFile.getLengthRegions() + gckFile.getLengthFeatures() + 8);
+            fileInputStream.getChannel().position(GCKFile.HEADER_LENGTH + gckFile.getSequenceLength() + gckFile.getLengthRegions() + gckFile.getLengthFeatures() + 8);
             logger.info("Start position for Circularity = " + fileInputStream.getChannel().position());
             int offset = getNameAndCommentsLength(fileInputStream.getChannel().position(), gckFile.getFeatures());
             logger.info("Offset = " + offset);
@@ -317,10 +317,8 @@ public class GCKFileAnalyzer {
             logger.info("Current position = " + fileInputStream.getChannel().position());
             buffer = ByteBuffer.allocate(88);
             fileInputStream.read(buffer.array(), 0, 10); //Reads the length of definitions (total), the sequence length and the number of sites.
-            gckFile.setLengthSites(buffer.getInt(0));
             logger.info("Site length = " + buffer.getInt(0) + " Current position = " + fileInputStream.getChannel().position());
             int sitesLength = buffer.getInt(0) - 6; //6 bytes contain the sequence length and the number of features (int.size + short.size)
-            int sequenceLength = buffer.getInt(4);
             gckFile.setNumSites(buffer.getShort(8));
             logger.info("Number of sites = " + gckFile.getNumSites());
             allocateSites(gckFile.getNumSites());
@@ -364,12 +362,18 @@ public class GCKFileAnalyzer {
                 throw e;
             }
 
-            //Convert char sequence to string, through character array.
-            char[] c = new char[constructNameLength];
-            for (int i = 0; i < constructNameLength; i++) {
-                c[i] = (char)(buffer.get());
+            if (GCKFile.USE_FILENAME_FOR_CONSTRUCT) {
+                String fileName = gckFile.getFile().getName();
+                int dotPosition = fileName.lastIndexOf('.');
+                gckFile.setConstructName(fileName.substring(0, (dotPosition > 0) ? dotPosition : fileName.length()));
+            } else {
+                //Convert char sequence to string, through character array.
+                char[] c = new char[constructNameLength];
+                for (int i = 0; i < constructNameLength; i++) {
+                    c[i] = (char) (buffer.get());
+                }
+                gckFile.setConstructName(String.valueOf(c)); //Set the name of the construct.
             }
-            gckFile.setConstructName(String.valueOf(c)); //Set the name of the construct.
 
             fileInputStream.skip(16); //Not sure what is stored here, but this is the offset between the name and the flags (probably flags).
             fileInputStream.read(buffer.array(), 0, 1); //This is the byte we want, the one that stores whether the construct is linear or circular. 0 if linear, 1 if circular.
